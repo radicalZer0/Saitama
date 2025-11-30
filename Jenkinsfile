@@ -9,7 +9,7 @@ pipeline {
         //SLACK_WEBHOOK = credentials('slack-webhook')
         AWS_CREDS_ID = "aws-credentials-jenkins-ci"
         APP_VERSION = ""
-        BUMP_TYPE = "none"
+        //BUMP_TYPE = "none"
     }
     options {
         disableConcurrentBuilds()
@@ -20,7 +20,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'git@github.com:radicalZer0/Saitama.git', credentialsId: 'saitama-ssh-key'
+                git branch: 'add-jenkinsfile', url: 'git@github.com:radicalZer0/Saitama.git', credentialsId: 'saitama-ssh-key'
                 //scm checkout #after adding github webhook
             }
         }
@@ -30,16 +30,33 @@ pipeline {
                 script {
                     def commitMsg = sh(script: "git log -1 --pretty=%s", returnStdout: true).trim()
                     echo "Latest commit message: $commitMsg"
+                    echo "Step 1"
 
-                    if (commitMsg.starsWith("major")) {
+                    if (commitMsg.startsWith("major")) {
                         env.BUMP_TYPE = "major"
-                    } else if (commitMsg.starsWith("feat")) {
-                        env.BUMP_TYPE = "minor"
-                    } else if (commitMsg.starsWith("fix")) {
-                    env.BUMP_TYPE = "patch"
+                        echo "Step 2"
+                    } else if (commitMsg.startsWith("feat")) {
+
+                        echo "Step 3.1"
+                        sh 'printenv'
+                        script {
+                            env.BUMP_TYPE = "minor"
+                        }
+
+                        echo "Step 3.2"
+
+                        sh 'printenv'
+                        echo "Step 3"
+                    } else if (commitMsg.startsWith("fix")) {
+                        env.BUMP_TYPE = "patch"
+                        echo "Step 4"
                     } else {
                         env.BUMP_TYPE = "none"
+                        echo "Step 5"
                     }
+                    echo "Step 6"
+                    echo "${BUMP_TYPE}"
+                    echo "Step 7"
                 }
             }
         }
