@@ -1,4 +1,3 @@
-
 pipeline {
     agent any
     environment {
@@ -6,12 +5,8 @@ pipeline {
         S3_BUCKET_APKS = "saitama-apks-balti"
         S3_BUCKET_SITE = "saitama-site-balti"
         CLOUDFRONT_ID = ""
-        //SLACK_WEBHOOK = credentials('slack-webhook')
-        AWS_CREDS_ID = "aws-credentials-jenkins-ci"
-        APP_VERSION = ""
-        //BUMP_TYPE = "none"
-    }
-    options {
+        //SLACK_WEBHOOK = credentials('slack-webhook') instead, using Bot as per Slack Notification plugin doc
+        AWS_CREDS_ID = "aws-credential
         disableConcurrentBuilds()
         skipDefaultCheckout(true)
         timestamps()
@@ -30,33 +25,18 @@ pipeline {
                 script {
                     def commitMsg = sh(script: "git log -1 --pretty=%s", returnStdout: true).trim()
                     echo "Latest commit message: $commitMsg"
-                    echo "Step 1"
 
-                    if (commitMsg.startsWith("major")) {
+                    if (commitMsg =~ /(?i)\bmajor\b/) {
                         env.BUMP_TYPE = "major"
-                        echo "Step 2"
-                    } else if (commitMsg.startsWith("feat")) {
-
-                        echo "Step 3.1"
-                        sh 'printenv'
-                        script {
+                    } else if (commitMsg =~ /(?i)\bfeat\b/) {
                             env.BUMP_TYPE = "minor"
-                        }
 
-                        echo "Step 3.2"
-
-                        sh 'printenv'
-                        echo "Step 3"
-                    } else if (commitMsg.startsWith("fix")) {
+                    } else if (commitMsg =~ /(?i)\bfix\b/) {
                         env.BUMP_TYPE = "patch"
-                        echo "Step 4"
                     } else {
                         env.BUMP_TYPE = "none"
-                        echo "Step 5"
                     }
-                    echo "Step 6"
                     echo "${BUMP_TYPE}"
-                    echo "Step 7"
                 }
             }
         }
@@ -84,8 +64,6 @@ pipeline {
                     env.APP_VERSION = "${major}.${minor}.${patch}"
                     writeFile file: 'version.txt', text: env.APP_VERSION
                     echo "New version: v${env.APP_VERSION}"
-
-                    //commit and push back to repo script
                 }
             }
         }
