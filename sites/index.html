@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Waystone Inn – Saitama Weight Tracker</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <meta name="description" content="Waystone Inn builds focused, privacy-first tools. Meet Saitama – a super simple, local-first weight tracking app." />
+
+    <!-- Open Graph (nice for link previews) -->
+    <meta property="og:title" content="Waystone Inn – Saitama Weight Tracker" />
+    <meta property="og:description" content="Track your weight. No accounts. No ads. Just progress." />
+    <meta property="og:type" content="website" />
+
+    <style>
+        :root {
+          --bg: #050816;
+          --bg-elevated: rgba(15, 23, 42, 0.9);
+          --accent: #38bdf8;
+          --accent-soft: rgba(56, 189, 248, 0.12);
+          --text: #e5e7eb;
+          --muted: #9ca3af;
+          --border-subtle: rgba(148, 163, 184, 0.25);
+          --radius-xl: 18px;
+          --radius-full: 999px;
+          --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.7);
+          --transition-fast: 150ms ease-out;
+        }
+
+        * {
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
+        }
+
+        body {
+          font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+            "Segoe UI", sans-serif;
+          background: radial-gradient(circle at top, #0f172a 0, #020617 55%, #020617 100%);
+          color: var(--text);
+          min-height: 100vh;
+          line-height: 1.5;
+          -webkit-font-smoothing: antialiased;
+        }
+
+        .page {
+          max-width: 100%;
+          margin: 0 auto;
+          padding: 1.5rem 1.25rem 3rem;
+        }
+
+        header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 1rem;
+          padding: 0.75rem 1rem;
+          border-radius: var(--radius-full);
+          border: 1px solid var(--border-subtle);
+          background: linear-gradient(
+            135deg,
+            rgba(15, 23, 42, 0.92),
+            rgba(15, 23, 42, 0.75)
+          );
+          backdrop-filter: blur(18px);
+          position: sticky;
+          top: 0.75rem;
+          z-index: 10;
+          box-shadow: 0 18px 45px rgba(15, 23, 42, 0.85);
+        }
+
+        .brand {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+        }
+
+        .brand-logo {
+          width: 32px;
+          height: 32px;
+          border-radius: 12px;
+          background: radial-gradient(circle at 30% 0%, #38bdf8, #0ea5e9 40%, #020617 100%);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.3),
+            0 10px 25px rgba(15, 23, 42, 0.9);
+          font-size: 18px;
+          font-weight: 700;
+          color: #e0f2fe;
+        }
+
+        .brand-text-title {
+          font-size: 0.95rem;
+          font-weight: 600;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          color: #e5e7eb;
+        }
+
+        .brand-text-sub {
+          font-size: 0.75rem;
+          color: var(--muted);
+        }
+
+        .nav-pill {
+          font-size: 0.75rem;
+          padding: 0.25rem 0.65rem;
+          border-radius: 999px;
+          border: 1px solid rgba(148, 163, 184, 0.7);
+          color: var(--muted);
+          display: inline-flex;
+          align-items: center;
+          gap: 0.35rem;
+          background: rgba(15, 23, 42, 0.7);
+        }
+
+        .nav-badge-dot {
+          width: 6px;
+          height: 6px;
+          border-radius: 999px;
+          background: #22c55e;
+          box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.2);
+        }
+
+        main {
+          margin-top: 1.75rem;
+          display: grid;
+          gap: 1.75rem;
+        }
+
+        /* Hero section */
+        .hero {
+          display: grid;
+          grid-template-columns: minmax(0, 1.4fr);
+          gap: 1.75rem;
+        }
+
+        @media (min-width: 768px) {
+          .hero {
+            grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.1fr);
+            align-items: center;
+          }
+        }
+
+        .hero-text {
+          display: flex;
+          flex-direction: column;
+          gap: 1.25rem;
+        }
+
+        .eyebrow {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.15rem 0.6rem 0.15rem 0.2rem;
+          border-radius: 999px;
+          background: rgba(15, 23, 42, 0.9);
+          border: 1px solid rgba(148, 163, 184, 0.6);
+          font-size: 0.75rem;
+          color: var(--muted);
+          width: max-content;
+        }
+
+        .eyebrow-pill {
+          padding: 0.15rem 0.5rem;
+          border-radius: 999px;
+          background: rgba(56, 189, 248, 0.15);
+          color: #e0f2fe;
+          font-weight: 500;
+          font-size: 0.7rem;
+          letter-spacing: 0.06em;
+          text-transform: uppercase;
+        }
+
+        h1 {
+          font-size: clamp(2.0rem, 5vw, 2.7rem);
+          line-height: 1.15;
+          letter-spacing: -0.03em;
+        }
+
+        .hero-highlight {
+          background: linear-gradient(to right, #38bdf8, #a5b4fc);
+          -webkit-background-clip: text;
+          background-clip: text;
+          color: transparent;
+        }
+
+        .hero-body {
+          font-size: 0.98rem;
+          color: var(--muted);
+          max-width: 32rem;
+        }
+
+        .hero-body strong {
+          color: #e5e7eb;
+          font-weight: 500;
+        }
+
+        .cta-row {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.75rem;
+          align-items: center;
+          margin-top: 0.5rem;
+        }
+
+        .btn-primary {
+          border: none;
+          cursor: pointer;
+          padding: 0.7rem 1.3rem;
+          border-radius: var(--radius-full);
+          font-size: 0.95rem;
+          font-weight: 600;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+          color: #0b1220;
+          box-shadow: 0 14px 35px rgba(8, 47, 73, 0.9);
+          transition: transform var(--transition-fast),
+            box-shadow var(--transition-fast),
+            filter var(--transition-fast);
+        }
+
+        .btn-primary:hover {
+          transform: translateY(-1px);
+          filter: brightness(1.05);
+          box-shadow: 0 18px 40px rgba(8, 47, 73, 1);
+        }
+
+        .btn-primary:active {
+          transform: translateY(0);
+          box-shadow: 0 12px 28px rgba(8, 47, 73, 0.8);
+        }
+
+        .btn-secondary {
+          padding: 0.6rem 0.95rem;
+          border-radius: var(--radius-full);
+          border: 1px dashed rgba(148, 163, 184, 0.7);
+          background: rgba(15, 23, 42, 0.75);
+          color: var(--muted);
+          font-size: 0.8rem;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.4rem;
+        }
+
+        .btn-secondary span.version-badge {
+          padding: 0 0.45rem;
+          border-radius: 999px;
+          background: rgba(15, 23, 42, 0.9);
+          border: 1px solid rgba(148, 163, 184, 0.7);
+          font-size: 0.75rem;
+          color: #e5e7eb;
+        }
+
+        .meta-row {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.5rem 1.25rem;
+          margin-top: 0.4rem;
+          font-size: 0.75rem;
+          color: var(--muted);
+        }
+
+        .meta-tag {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.3rem;
+        }
+
+        .dot {
+          width: 7px;
+          height: 7px;
+          border-radius: 999px;
+          background: var(--accent);
+        }
+
+        /* Download card */
+        .hero-card {
+          border-radius: 24px;
+          border: 1px solid var(--border-subtle);
+          background: radial-gradient(circle at top left, #0f172a 0, #020617 50%);
+          padding: 1.15rem 1.1rem;
+          box-shadow: var(--shadow-soft);
+          position: relative;
+          overflow: hidden;
+        }
+
+        .hero-card::before {
+          content: "";
+          position: absolute;
+          inset: -40%;
+          background:
+            radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.17), transparent 60%),
+            radial-gradient(circle at 100% 100%, rgba(129, 140, 248, 0.14), transparent 60%);
+          opacity: 0.65;
+          pointer-events: none;
+        }
+
+        .hero-card-inner {
+          position: relative;
+          z-index: 1;
+          display: flex;
+          flex-direction: column;
+          gap: 0.75rem;
+        }
+
+        .pill-platform {
+          padding: 0.2rem 0.6rem;
+          border-radius: 999px;
+          background: rgba(15, 23, 42, 0.85);
+          border: 1px solid rgba(148, 163, 184, 0.9);
+          font-size: 0.7rem;
+          color: var(--muted);
+          align-self: flex-start;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.4rem;
+        }
+
+        .pill-platform span {
+          font-weight: 500;
+          color: #e5e7eb;
+        }
+
+        .card-title {
+          font-size: 1.05rem;
+          font-weight: 600;
+          display: flex;
+          align-items: baseline;
+          gap: 0.35rem;
+        }
+
+        .card-title-badge {
+          font-size: 0.7rem;
+          padding: 0.1rem 0.45rem;
+          border-radius: 999px;
+          background: rgba(56, 189, 248, 0.15);
+          border: 1px solid rgba(56, 189, 248, 0.7);
+          color: #e0f2fe;
+        }
+
+        .card-body {
+          font-size: 0.8rem;
+          color: var(--muted);
+        }
+
+        .download-section {
+          display: flex;
+          flex-direction: column;
+          gap: 0.6rem;
+          margin-top: 0.35rem;
+        }
+
+        .download-row {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.6rem;
+          align-items: center;
+        }
+
+        .select-version {
+          min-width: 0;
+          padding: 0.55rem 0.75rem;
+          border-radius: var(--radius-full);
+          border: 1px solid rgba(148, 163, 184, 0.7);
+          background: rgba(15, 23, 42, 0.85);
+          color: var(--text);
+          font-size: 0.8rem;
+          flex: 1;
+          appearance: none;
+          background-image: linear-gradient(45deg, transparent 50%, #9ca3af 50%),
+            linear-gradient(135deg, #9ca3af 50%, transparent 50%);
+          background-position: calc(100% - 13px) 50%, calc(100% - 8px) 50%;
+          background-size: 6px 6px, 6px 6px;
+          background-repeat: no-repeat;
+        }
+
+        .release-meta {
+          font-size: 0.7rem;
+          color: var(--muted);
+          display: flex;
+          justify-content: space-between;
+          gap: 0.5rem;
+          flex-wrap: wrap;
+        }
+
+        .pill-changelog {
+          padding: 0.2rem 0.45rem;
+          border-radius: 999px;
+          background: rgba(15, 23, 42, 0.85);
+          border: 1px solid rgba(148, 163, 184, 0.7);
+          font-size: 0.7rem;
+          color: var(--muted);
+        }
+
+        /* Features section */
+        .section {
+          border-radius: var(--radius-xl);
+          border: 1px solid var(--border-subtle);
+          background: linear-gradient(
+            145deg,
+            rgba(15, 23, 42, 0.9),
+            rgba(15, 23, 42, 0.65)
+          );
+          padding: 1.1rem 1rem;
+          box-shadow: 0 14px 36px rgba(15, 23, 42, 0.8);
+        }
+
+        .section-header {
+          display: flex;
+          justify-content: space-between;
+          gap: 1rem;
+          align-items: flex-start;
+          margin-bottom: 0.75rem;
+        }
+
+        .section-title {
+          font-size: 0.95rem;
+          font-weight: 600;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+        }
+
+        .section-title span.icon {
+          width: 20px;
+          height: 20px;
+          border-radius: 999px;
+          background: radial-gradient(circle at 30% 0%, #38bdf8, #0ea5e9);
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 0.85rem;
+        }
+
+        .section-subtitle {
+          font-size: 0.8rem;
+          color: var(--muted);
+          max-width: 23rem;
+        }
+
+        .feature-grid {
+          display: grid;
+          gap: 0.75rem;
+        }
+
+        @media (min-width: 640px) {
+          .feature-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+          }
+        }
+
+        .feature-card {
+          padding: 0.7rem 0.65rem;
+          border-radius: 14px;
+          border: 1px solid rgba(148, 163, 184, 0.35);
+          background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.6));
+          font-size: 0.8rem;
+          display: flex;
+          flex-direction: column;
+          gap: 0.3rem;
+        }
+
+        .feature-label {
+          font-size: 0.75rem;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          color: var(--muted);
+        }
+
+        .feature-title {
+          font-weight: 500;
+          color: #e5e7eb;
+        }
+
+        .feature-body {
+          font-size: 0.78rem;
+          color: var(--muted);
+        }
+
+        /* Coming soon section */
+        .coming-soon-tags {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.4rem;
+          font-size: 0.75rem;
+          margin-top: 0.4rem;
+        }
+
+        .pill-tag {
+          padding: 0.2rem 0.55rem;
+          border-radius: 999px;
+          border: 1px dashed rgba(148, 163, 184, 0.7);
+          color: var(--muted);
+          background: rgba(15, 23, 42, 0.85);
+        }
+
+        footer {
+          margin-top: 1.5rem;
+          font-size: 0.75rem;
+          color: var(--muted);
+          display: flex;
+          justify-content: space-between;
+          gap: 0.75rem;
+          flex-wrap: wrap;
+          padding: 0 0.15rem;
+        }
+
+        footer a {
+          color: #a5b4fc;
+          text-decoration: none;
+          border-bottom: 1px dashed rgba(129, 140, 248, 0.7);
+        }
+
+        /* Small helper classes */
+        .hidden {
+          display: none !important;
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+    <header>
+        <div class="brand">
+            <div class="brand-logo">W</div>
+            <div>
+                <div class="brand-text-title">Waystone Inn</div>
+                <div class="brand-text-sub">Quiet tools for loud goals.</div>
+            </div>
+        </div>
+        <div class="nav-pill">
+            <div class="nav-badge-dot"></div>
+            <span>Now hosting</span>
+            <strong>Saitama</strong>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-text">
+                <div class="eyebrow">
+                    <div class="eyebrow-pill">New • Android APK</div>
+                    <span>Local-first weight tracking</span>
+                </div>
+                <h1>
+                    Track your weight,
+                    <span class="hero-highlight">without the noise.</span>
+                </h1>
+                <p class="hero-body">
+                    Saitama is a <strong>simple, private weight tracker</strong> from Waystone Inn.
+                    No accounts, no ads, no feeds — just you, your numbers, and a clear trendline.
+                </p>
+                <p class="hero-body">
+                    Waystone Inn is an independent software studio  building small, opinionated consumer apps.
+                </p>
+
+                <div class="cta-row">
+                    <button id="download-latest-btn" class="btn-primary" disabled>
+                        <span id="download-btn-label">Loading latest APK…</span>
+                        <span aria-hidden="true">⬇</span>
+                    </button>
+
+<!--                    <button class="btn-secondary" type="button">-->
+<!--                        <span>Previous versions</span>-->
+<!--                        <span class="version-badge" id="short-latest-version">–</span>-->
+<!--                    </button>-->
+                </div>
+
+                <div class="meta-row">
+                    <div class="meta-tag">
+                        <span class="dot"></span>
+                        <span>Data stays on your device</span>
+                    </div>
+                    <div class="meta-tag">
+                        <span>📈 7-day averages</span>
+                    </div>
+                    <div class="meta-tag">
+                        <span>🚫 No signup, no ads</span>
+                    </div>
+                </div>
+            </div>
+
+            <aside class="hero-card" aria-label="Download Saitama APK">
+                <div class="hero-card-inner">
+                    <div class="pill-platform">
+                        <span>Android</span>
+                        <span>• APK download</span>
+                    </div>
+                    <div class="card-title">
+                        Saitama
+                        <span class="card-title-badge" id="badge-version">v–</span>
+                    </div>
+                    <p class="card-body">
+                        Designed for people who just want to step on the scale, log the number,
+                        and move on with their day. Nothing else.
+                    </p>
+
+                    <div class="download-section">
+                        <div class="download-row">
+                            <button id="card-download-btn" class="btn-primary" disabled>
+                                <span id="card-download-label">Download latest</span>
+                                <span aria-hidden="true">⬇</span>
+                            </button>
+
+                            <select id="version-select" class="select-version" disabled>
+                                <option>Loading versions…</option>
+                            </select>
+                        </div>
+
+                        <div class="release-meta">
+                            <span id="release-date-label">Release date: –</span>
+                            <span class="pill-changelog" id="release-notes-label">Notes: –</span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </section>
+
+        <!-- Features section -->
+        <section class="section" aria-labelledby="features-heading">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title" id="features-heading">
+                        <span class="icon">⚖︎</span>
+                        Built to be boring (on purpose).
+                    </h2>
+                </div>
+                <p class="section-subtitle">
+                    Saitama doesn’t try to gamify you. It quietly tracks what matters and gets out of
+                    your way. The magic is in showing up, not in shiny charts.
+                </p>
+            </div>
+
+            <div class="feature-grid">
+                <article class="feature-card">
+                    <div class="feature-label">Core</div>
+                    <div class="feature-title">Fast, 3-second logging</div>
+                    <p class="feature-body">
+                        Open app → add today’s weight → done. No endless forms or multi-step flows.
+                    </p>
+                </article>
+
+                <article class="feature-card">
+                    <div class="feature-label">Clarity</div>
+                    <div class="feature-title">7-day rolling average</div>
+                    <p class="feature-body">
+                        Smooth the noise and focus on the trend, not the random daily spikes.
+                    </p>
+                </article>
+
+                <article class="feature-card">
+                    <div class="feature-label">Privacy</div>
+                    <div class="feature-title">Local-first data</div>
+                    <p class="feature-body">
+                        All your entries live on your device. No cloud sync or surprise “backups”.
+                    </p>
+                </article>
+
+                <article class="feature-card">
+                    <div class="feature-label">Future</div>
+                    <div class="feature-title">Goal tracking (soon)</div>
+                    <p class="feature-body">
+                        Set target ranges and get gentle nudges when you drift too far from them.
+                    </p>
+                </article>
+
+                <article class="feature-card">
+                    <div class="feature-label">Future</div>
+                    <div class="feature-title">Simple progress exports</div>
+                    <p class="feature-body">
+                        Export your data as CSV so you can play with it however you like.
+                    </p>
+                </article>
+
+                <article class="feature-card">
+                    <div class="feature-label">Waystone</div>
+                    <div class="feature-title">More tools coming</div>
+                    <p class="feature-body">
+                        Saitama is our first tool. We’re quietly building more small, opinionated apps.
+                    </p>
+                </article>
+            </div>
+        </section>
+
+        <!-- Coming soon / product list -->
+        <section class="section" aria-labelledby="coming-soon-heading">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title" id="coming-soon-heading">
+                        <span class="icon">✨</span>
+                        From the Waystone Inn.
+                    </h2>
+                </div>
+                <p class="section-subtitle">
+                    This site will eventually list all our products. For now, Saitama is the only guest.
+                </p>
+            </div>
+
+            <p style="font-size: 0.8rem; color: var(--muted);">
+                We’re exploring a small family of focused tools around health and habit-building.
+                When they’re ready, they’ll appear here — same domain, same quiet design.
+            </p>
+
+            <div class="coming-soon-tags">
+                <span class="pill-tag">📱 Companion apps</span>
+                <span class="pill-tag">📊 Lightweight analytics</span>
+                <span class="pill-tag">🧠 Habit helpers</span>
+                <span class="pill-tag">🔒 Privacy-first by default</span>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <span>© <span id="year"></span> Waystone Inn.</span>
+        <span>Questions? <a href="mailto:hello@waystoneinn.shop">hello@waystoneinn.shop</a></span>
+    </footer>
+</div>
+
+<script>
+    // Point this to where versions.json lives (APK bucket / CloudFront)
+    const VERSIONS_JSON_URL = "https://downloads.waystoneinn.shop/versions.json";
+
+    const latestBtn = document.getElementById("download-latest-btn");
+    const cardDownloadBtn = document.getElementById("card-download-btn");
+    const downloadBtnLabel = document.getElementById("download-btn-label");
+    const cardDownloadLabel = document.getElementById("card-download-label");
+    const versionSelect = document.getElementById("version-select");
+    const badgeVersion = document.getElementById("badge-version");
+<!--    const shortLatestVersion = document.getElementById("short-latest-version");-->
+    const releaseDateLabel = document.getElementById("release-date-label");
+    const releaseNotesLabel = document.getElementById("release-notes-label");
+    const yearSpan = document.getElementById("year");
+
+    yearSpan.textContent = new Date().getFullYear();
+
+    let versionsData = null;
+
+    async function loadVersions() {
+      try {
+        const response = await fetch(VERSIONS_JSON_URL, {
+          cache: "no-cache",
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch versions.json");
+        }
+
+        const data = await response.json();
+        versionsData = data;
+
+        const latest = data.latest;
+        const previous = Array.isArray(data.previous) ? data.previous.slice(0, 2) : [];
+
+        // Build version options: latest first, then up to 2 previous = 3 total
+        const allVersions = [latest, ...previous];
+
+        versionSelect.innerHTML = "";
+        allVersions.forEach((v, idx) => {
+          const option = document.createElement("option");
+          option.value = v.url; // now using full URL from JSON
+          option.textContent = `v${v.version} – ${v.releaseDate || "Unknown date"}`;
+          if (idx === 0) {
+            option.selected = true;
+          }
+          versionSelect.appendChild(option);
+        });
+
+        // Update labels
+        const latestLabel = "Download v" + latest.version;
+        downloadBtnLabel.textContent = latestLabel;
+        cardDownloadLabel.textContent = latestLabel;
+        badgeVersion.textContent = "v" + latest.version;
+<!--        shortLatestVersion.textContent = "v" + latest.version;-->
+        releaseDateLabel.textContent = "Release date: " + (latest.releaseDate || "–");
+        releaseNotesLabel.textContent =
+          "Notes: " + (latest.notes || "Latest stable build");
+
+        // Enable controls
+        latestBtn.disabled = false;
+        cardDownloadBtn.disabled = false;
+        versionSelect.disabled = false;
+
+        const latestUrl = latest.url;
+
+        latestBtn.addEventListener("click", () => {
+          window.location.href = latestUrl;
+        });
+
+        cardDownloadBtn.addEventListener("click", () => {
+          window.location.href = latestUrl;
+        });
+
+        versionSelect.addEventListener("change", (e) => {
+          const url = e.target.value;
+          if (!url) return;
+          window.location.href = url; // already full S3/CloudFront URL
+        });
+      } catch (err) {
+        console.error(err);
+        downloadBtnLabel.textContent = "Couldn’t load versions";
+        cardDownloadLabel.textContent = "Couldn’t load versions";
+        versionSelect.innerHTML = "<option>Error loading versions</option>";
+      }
+    }
+
+    loadVersions();
+</script>
+
+</body>
+</html>

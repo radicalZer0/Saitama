@@ -1,0 +1,17 @@
+{
+  "appName": "Saitama",
+  "latest": {
+    "version": "1.0.9",
+    "url": "https://downloads.waystoneinn.shop/saitama-latest.apk",
+    "releaseDate": "2025-11-25",
+    "notes": "Minor bug fixes and added charts."
+  },
+  "previous": [
+    {
+      "version": "1.0.7",
+      "url": "https://downloads.waystoneinn.shop/saitama-v1.0.7.apk",
+      "releaseDate": "2025-10-12",
+      "notes": "Initial stable release."
+    }
+  ]
+}
