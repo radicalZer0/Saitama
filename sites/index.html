@@ -2,13 +2,20 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <title>Waystone Inn – Saitama Weight Tracker</title>
+    <title>Waystone Labs – Saitama Weight Tracker</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <meta name="description" content="Waystone Inn builds focused, privacy-first tools. Meet Saitama – a super simple, local-first weight tracking app." />
+    <!-- Favicon with W logo -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23020617'/%3E%3Ctext x='16' y='23' font-family='system-ui, sans-serif' font-size='18' font-weight='700' fill='%2338bdf8' text-anchor='middle'%3EW%3C/text%3E%3C/svg%3E">
+    <!-- Apple touch icon for iOS -->
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%23020617'/%3E%3Ctext x='90' y='125' font-family='system-ui, sans-serif' font-size='100' font-weight='700' fill='%2338bdf8' text-anchor='middle'%3EW%3C/text%3E%3C/svg%3E">
+    <!-- Fallback PNG favicon for older browsers -->
+    <link rel="icon" type="image/png" sizes="32x32" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23020617'/%3E%3Ctext x='16' y='23' font-family='system-ui, sans-serif' font-size='18' font-weight='700' fill='%2338bdf8' text-anchor='middle'%3EW%3C/text%3E%3C/svg%3E">
+
+    <meta name="description" content="Waystone Labs builds focused, privacy-first tools. Meet Saitama – a super simple, local-first weight tracking app." />
 
     <!-- Open Graph (nice for link previews) -->
-    <meta property="og:title" content="Waystone Inn – Saitama Weight Tracker" />
+    <meta property="og:title" content="Waystone Labs – Saitama Weight Tracker" />
     <meta property="og:description" content="Track your weight. No accounts. No ads. Just progress." />
     <meta property="og:type" content="website" />
 
@@ -527,7 +534,7 @@
         <div class="brand">
             <div class="brand-logo">W</div>
             <div>
-                <div class="brand-text-title">Waystone Inn</div>
+                <div class="brand-text-title">Waystone Labs</div>
                 <div class="brand-text-sub">Quiet tools for loud goals.</div>
             </div>
         </div>
@@ -550,11 +557,11 @@
                     <span class="hero-highlight">without the noise.</span>
                 </h1>
                 <p class="hero-body">
-                    Saitama is a <strong>simple, private weight tracker</strong> from Waystone Inn.
+                    Saitama is a <strong>simple, private weight tracker</strong> from Waystone Labs.
                     No accounts, no ads, no feeds — just you, your numbers, and a clear trendline.
                 </p>
                 <p class="hero-body">
-                    Waystone Inn is an independent software studio  building small, opinionated consumer apps.
+                    Waystone Labs is an independent software studio  building small, opinionated consumer apps.
                 </p>
 
                 <div class="cta-row">
@@ -563,10 +570,10 @@
                         <span aria-hidden="true">⬇</span>
                     </button>
 
-<!--                    <button class="btn-secondary" type="button">-->
-<!--                        <span>Previous versions</span>-->
-<!--                        <span class="version-badge" id="short-latest-version">–</span>-->
-<!--                    </button>-->
+                    <!--                    <button class="btn-secondary" type="button">-->
+                    <!--                        <span>Previous versions</span>-->
+                    <!--                        <span class="version-badge" id="short-latest-version">–</span>-->
+                    <!--                    </button>-->
                 </div>
 
                 <div class="meta-row">
@@ -691,7 +698,7 @@
                 <div>
                     <h2 class="section-title" id="coming-soon-heading">
                         <span class="icon">✨</span>
-                        From the Waystone Inn.
+                        From the Waystone Labs.
                     </h2>
                 </div>
                 <p class="section-subtitle">
@@ -714,14 +721,14 @@
     </main>
 
     <footer>
-        <span>© <span id="year"></span> Waystone Inn.</span>
-        <span>Questions? <a href="mailto:hello@waystoneinn.shop">hello@waystoneinn.shop</a></span>
+        <span>© <span id="year"></span> Waystone Labs.</span>
+        <span>Questions? <a href="mailto:support@waystonelabs.in">support@waystonelabs.in</a></span>
     </footer>
 </div>
 
 <script>
     // Point this to where versions.json lives (APK bucket / CloudFront)
-    const VERSIONS_JSON_URL = "https://downloads.waystoneinn.shop/versions.json";
+    const VERSIONS_JSON_URL = "https://downloads.waystonelabs.in/versions.json";
 
     const latestBtn = document.getElementById("download-latest-btn");
     const cardDownloadBtn = document.getElementById("card-download-btn");
